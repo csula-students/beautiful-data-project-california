@@ -79,7 +79,7 @@ public class PopulationSource implements Source<CountryPopulation> {
 
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
-        for (int i = year - 2; i <= year; i++) {
+        for (int i = 1980; i <= year; i++) {
             list.add(requestCountryPopulation(country, i));
         }
 
