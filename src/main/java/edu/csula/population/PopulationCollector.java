@@ -8,11 +8,12 @@ import org.bson.Document;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * An example of Collector implementation using Twitter4j with MongoDB Java driver
+ * An example of Collector
  */
-public class PopulationCollector implements Collector<PopulationTable, PopulationTable> {
+public class PopulationCollector implements Collector<CountryPopulation, CountryPopulation> {
     MongoClient mongoClient;
     MongoDatabase database;
     MongoCollection<Document> collection;
@@ -20,27 +21,38 @@ public class PopulationCollector implements Collector<PopulationTable, Populatio
     public PopulationCollector() {
         // establish database connection to MongoDB
         mongoClient = new MongoClient();
-        // select `bd-example` as testing database
-        database = mongoClient.getDatabase("bd-example");
-
-        // select collection by name `tweets`
+        database = mongoClient.getDatabase("countries-db");
         collection = database.getCollection("population");
     }
 
     @Override
-    public Collection<PopulationTable> mungee(Collection<PopulationTable> src) {
+    public Collection<CountryPopulation> mungee(Collection<CountryPopulation> src) {
         return src;
     }
 
     @Override
-    public void save(Collection<PopulationTable> data) {
+    public void save(Collection<CountryPopulation> data) {
         List<Document> documents = data.stream()
-            .map(item -> new Document()
-                .append("total", item.getTotal())
-                .append("age", item.getAge())
-                .append("year", item.getYear())
-                .append("male", item.getMales())
-                .append("female", item.getFemales()))
+            .map(item -> {
+
+                Document country = new Document()
+                        .append("name", item.getName());
+
+                Stream<Document> docs = item.getRecords().stream().map(i -> {
+                    Document sub = new Document();
+
+                    sub.append("age", i.getAge())
+                            .append("year", i.getYear())
+                            .append("male", i.getMales())
+                            .append("female", i.getFemales());
+
+                    return sub;
+                });
+
+                country.append("records", docs.collect(Collectors.toList()));
+
+                return country;
+            })
             .collect(Collectors.toList());
 
         collection.insertMany(documents);

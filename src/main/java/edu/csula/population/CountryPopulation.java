@@ -1,15 +1,16 @@
 package edu.csula.population;
 
-import java.util.List;
+import java.util.ArrayList;
 
-/**
- * Created by theory on 4/17/16.
- */
 public class CountryPopulation {
 
     private String name;
 
-    private List<PopulationTable> totals;
+    private ArrayList<PopulationRecord> records;
+
+    CountryPopulation(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;
@@ -19,11 +20,11 @@ public class CountryPopulation {
         this.name = name;
     }
 
-    public List<PopulationTable> getTotals() {
-        return totals;
+    public ArrayList<PopulationRecord> getRecords() {
+        return records;
     }
 
-    public void setTotals(List<PopulationTable> totals) {
-        this.totals = totals;
+    public void setRecords(ArrayList<PopulationRecord> records) {
+        this.records = records;
     }
 }

@@ -1,12 +1,8 @@
 package edu.csula.population;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-/**
- * Created by theory on 4/17/16.
- */
 public class CountryList {
 
     final static String[] countries = new String[]{
@@ -212,7 +208,7 @@ public class CountryList {
             "Zambia"
     };
 
-    public static ArrayList<String> getCountryList() {
-        return new ArrayList<String>(Arrays.asList(countries));
+    public static LinkedList<String> getCountryList() {
+        return new LinkedList<>(Arrays.asList(countries));
     }
 }

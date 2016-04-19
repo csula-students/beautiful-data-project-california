@@ -11,14 +11,17 @@ public class PopulationCollectorApp {
 
         // get json from brazil
         // array of objects
-        PopulationSource source = new PopulationSource("Brazil");
+        PopulationSource source = new PopulationSource();
 
 
         // put it in the collector
         PopulationCollector collector = new PopulationCollector();
 
-
-
+        while (source.hasNext()) {
+            Collection<CountryPopulation> pop = source.next();
+            Collection<CountryPopulation> cleaned = collector.mungee(pop);
+            collector.save(cleaned);
+        }
 
     }
 }

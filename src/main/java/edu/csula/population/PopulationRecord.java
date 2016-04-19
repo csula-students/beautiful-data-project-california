@@ -1,19 +1,16 @@
 package edu.csula.population;
 
-/**
- * Created by theory on 4/17/16.
- */
-public class PopulationTable {
+public class PopulationRecord {
 
     private int total;
+
+    private int age;
 
     private int females;
 
     private int males;
 
     private int year;
-
-    private int age;
 
     public int getTotal() {
         return total;
@@ -53,5 +50,10 @@ public class PopulationTable {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Total: %d, Year: %d", total, year);
     }
 }
