@@ -9,7 +9,7 @@ public class WorldBankPopulationRecord {
 
     private String date;
 
-    WorldBankPopulationRecord(){
+    WorldBankPopulationRecord() {
 
     }
 

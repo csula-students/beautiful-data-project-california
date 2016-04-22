@@ -1,14 +1,11 @@
 package edu.csula.population;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import com.google.common.collect.Lists;
 import com.mashape.unirest.http.JsonNode;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.*;
@@ -24,13 +21,13 @@ public class WorldBankPopulationSource implements Source<WorldBankCountryPopulat
     private WorldBankCountryPopulation wcpop;
 
 
-    public WorldBankPopulationSource(){
+    public WorldBankPopulationSource() {
         list = WorldBankCountryList.getCountryListcode();
         iterator = list.iterator();
     }
 
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         WorldBankPopulationSource w = new WorldBankPopulationSource();
 
         //System.out.println(w.requestWorldBankCountryPopulation("AR","2016"));
@@ -38,7 +35,7 @@ public class WorldBankPopulationSource implements Source<WorldBankCountryPopulat
 
     }
 
-    private WorldBankCountryPopulation requestWorldBankCountryPopulation(String country, String year){
+    private WorldBankCountryPopulation requestWorldBankCountryPopulation(String country, String year) {
 
         //http://api.worldbank.org/countries/PER/indicators/SP.POP.TOTL?per_page=50&date=1980:2016&format=json
 
@@ -52,15 +49,15 @@ public class WorldBankPopulationSource implements Source<WorldBankCountryPopulat
 
         JSONArray c = new JSONArray();
 
-        for(int i= 0; i < a.length(); i++){
+        for (int i = 0; i < a.length(); i++) {
 
             JSONObject b = new JSONObject(a.get(i).toString());
 
 
             ObjectNode treeRootNode = objectMapper.createObjectNode();
 
-            treeRootNode.put("value",b.get("value").toString());
-            treeRootNode.put("date",b.get("date").toString());
+            treeRootNode.put("value", b.get("value").toString());
+            treeRootNode.put("date", b.get("date").toString());
 
             c.put(treeRootNode);
 
@@ -70,17 +67,15 @@ public class WorldBankPopulationSource implements Source<WorldBankCountryPopulat
 
         //System.out.println(country);
 
-        String d = c.toString().replace("\\","");
-        d = d.replace("\"{","{");
-        d = d.replace("}\"","}");
+        String d = c.toString().replace("\\", "");
+        d = d.replace("\"{", "{");
+        d = d.replace("}\"", "}");
 
         //System.out.println(d);
 
 
-
         //JsonNode node = objectMapper.readvalue(treeRootNode,JsonNode.class);
         //ObjectNode treeRootNode = objectMapper.createObjectNode();
-
 
 
         WorldBankCountryPopulation wbpop = new WorldBankCountryPopulation(country);
@@ -92,7 +87,6 @@ public class WorldBankPopulationSource implements Source<WorldBankCountryPopulat
         //System.out.println(json.getArray().length());
         //JSONObject j = new JSONObject(str);
         //System.out.println(j.length());
-
 
 
         //JSONObject obj  = new JSONObject(str);
@@ -110,7 +104,7 @@ public class WorldBankPopulationSource implements Source<WorldBankCountryPopulat
                     d,
                     objectMapper.getTypeFactory().constructCollectionType(
                             List.class, WorldBankPopulationRecord.class));
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 ////
@@ -120,14 +114,14 @@ public class WorldBankPopulationSource implements Source<WorldBankCountryPopulat
 
     }
 
-    private  Collection<WorldBankCountryPopulation> query(String country){
+    private Collection<WorldBankCountryPopulation> query(String country) {
 
         List<WorldBankCountryPopulation> list = Lists.newArrayList();
 
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
         //for (int i = 1980; i <= year; i++) {
-            list.add(requestWorldBankCountryPopulation(country, (year - 2)+""));
+        list.add(requestWorldBankCountryPopulation(country, (year - 2) + ""));
         //}
 
         return list;
@@ -135,10 +129,10 @@ public class WorldBankPopulationSource implements Source<WorldBankCountryPopulat
 
 
     @Override
-    public boolean hasNext()
-    {
+    public boolean hasNext() {
         return this.iterator.hasNext();
     }
+
     @Override
     public Collection<WorldBankCountryPopulation> next() {
         String country = iterator.next();

@@ -11,7 +11,7 @@ public class WorldBankCountryPopulation {
 
     private ArrayList<WorldBankPopulationRecord> records;
 
-    WorldBankCountryPopulation (String country) {
+    WorldBankCountryPopulation(String country) {
         this.country = country;
     }
 

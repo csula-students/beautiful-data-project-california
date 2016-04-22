@@ -33,27 +33,27 @@ public class PopulationCollector implements Collector<CountryPopulation, Country
     @Override
     public void save(Collection<CountryPopulation> data) {
         List<Document> documents = data.stream()
-            .map(item -> {
+                .map(item -> {
 
-                Document country = new Document()
-                        .append("name", item.getName());
+                    Document country = new Document()
+                            .append("name", item.getName());
 
-                Stream<Document> docs = item.getRecords().stream().map(i -> {
-                    Document sub = new Document();
+                    Stream<Document> docs = item.getRecords().stream().map(i -> {
+                        Document sub = new Document();
 
-                    sub.append("age", i.getAge())
-                            .append("year", i.getYear())
-                            .append("male", i.getMales())
-                            .append("female", i.getFemales());
+                        sub.append("age", i.getAge())
+                                .append("year", i.getYear())
+                                .append("male", i.getMales())
+                                .append("female", i.getFemales());
 
-                    return sub;
-                });
+                        return sub;
+                    });
 
-                country.append("records", docs.collect(Collectors.toList()));
+                    country.append("records", docs.collect(Collectors.toList()));
 
-                return country;
-            })
-            .collect(Collectors.toList());
+                    return country;
+                })
+                .collect(Collectors.toList());
 
         collection.insertMany(documents);
     }

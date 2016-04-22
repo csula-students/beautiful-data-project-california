@@ -26,7 +26,7 @@ public class PopulationSource implements Source<CountryPopulation> {
         iterator = list.iterator();
     }
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         PopulationSource p = new PopulationSource();
 //        p.requestCountryList();
         p.requestCountryPopulation("Brazil", 1980);
@@ -34,6 +34,7 @@ public class PopulationSource implements Source<CountryPopulation> {
 
     /**
      * Gets the list of countries from the API resource
+     *
      * @return
      */
     private List<String> requestCountryList() {
