@@ -1,6 +1,7 @@
 package edu.csula.datascience.acquisition;
 
 import com.google.common.collect.Lists;
+import edu.csula.population.Source;
 
 import java.util.Collection;
 import java.util.function.Consumer;

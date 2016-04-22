@@ -1,5 +1,7 @@
 package edu.csula.datascience.acquisition;
 
+import edu.csula.population.Collector;
+
 import java.util.Collection;
 import java.util.stream.Collectors;
 

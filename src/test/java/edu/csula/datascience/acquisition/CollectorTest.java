@@ -1,6 +1,8 @@
 package edu.csula.datascience.acquisition;
 
 import com.google.common.collect.Lists;
+import edu.csula.population.Collector;
+import edu.csula.population.Source;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +16,7 @@ import static org.junit.Assert.*;
  * A test case to show how to use Collector and Source
  */
 public class CollectorTest {
+
     private Collector<SimpleModel, MockData> collector;
     private Source<MockData> source;
 
