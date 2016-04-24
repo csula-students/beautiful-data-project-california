@@ -1,8 +1,9 @@
-package edu.csula.population;
+package edu.csula.datascience.acquisition;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import edu.csula.population.Collector;
 import org.bson.Document;
 
 import java.util.Collection;
@@ -11,28 +12,28 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Created by williamsalinas on 4/21/16.
+ * Created by williamsalinas on 4/23/16.
  */
-public class WorldBankPopulationCollector implements Collector<WorldBankCountryPopulation, WorldBankCountryPopulation>{
+public class MockWorldBankPopulationCollector implements Collector<MockBankCountryData, MockBankCountryData> {
 
     MongoClient mongoClient;
     MongoDatabase database;
     MongoCollection<Document> collection;
 
-    public WorldBankPopulationCollector() {
+    public MockWorldBankPopulationCollector() {
         // establish database connection to MongoDB
         mongoClient = new MongoClient();
-        database = mongoClient.getDatabase("countries-db");
-        collection = database.getCollection("worldbankpopulation");
+        database = mongoClient.getDatabase("test-countries-db");
+        collection = database.getCollection("test_world_bank_population");
     }
 
     @Override
-    public Collection<WorldBankCountryPopulation> mungee(Collection<WorldBankCountryPopulation> src) {
+    public Collection<MockBankCountryData> mungee(Collection<MockBankCountryData> src) {
         return src;
     }
 
     @Override
-    public void save(Collection<WorldBankCountryPopulation> data) {
+    public void save(Collection<MockBankCountryData> data) {
         List<Document> documents = data.stream()
                 .map(item -> {
 
