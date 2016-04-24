@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 /**
  * Created by williamsalinas on 4/24/16.
  */
-public class OpenAddressDataCollector implements Collector<OpenAddressData, OpenAddressData>{
+public class OpenAddressDataCollector implements Collector<OpenAddressData, OpenAddressData> {
 
     MongoClient mongoClient;
     MongoDatabase database;
