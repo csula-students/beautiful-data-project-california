@@ -1,10 +1,16 @@
 package edu.csula.datascience.acquisition;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
+import com.mashape.unirest.http.JsonNode;
 import edu.csula.population.Source;
+import edu.csula.population.Tools;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Created by williamsalinas on 4/23/16.
@@ -12,6 +18,81 @@ import java.util.Collection;
 public class MockWorldBankPopulationSource implements Source<MockBankCountryData>{
 
     int index = 0;
+
+    private LinkedList<String> list;
+    private Iterator<String> iterator;
+    private MockBankCountryData wcpop;
+
+
+    public MockBankCountryData requestWorldBankCountryPopulation(String country, String year) {
+
+        //http://api.worldbank.org/countries/PER/indicators/SP.POP.TOTL?per_page=50&date=1980:2016&format=json
+
+//        JsonNode json = Tools.requestJson(
+//                String.format("http://api.worldbank.org/countries/%s/indicators/SP.POP.TOTL?per_page=50&date=1980:%s&format=json",
+//                        country, year));
+
+
+        String fakeJsonString = "[{'indicator':{'id':'SP.POP.TOTL','value':'Population, total'},'country':{'id':'AR','value':'Argentina'},'value':'41222875','decimal':'0','date':'2010'},{'indicator':{'id':'SP.POP.TOTL','value':'Population, total'},'country':{'id':'AR','value':'Argentina'},'value':'40798641','decimal':'0','date':'2009'}]";
+
+//        String jsonString = fakeJsonString;
+//
+//        ObjectMapper mapper = new ObjectMapper();
+//        JsonNode actualObj = null;
+//        try {
+//            actualObj = mapper.readTree(fakeJsonString);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+        JSONArray a = new JSONArray(fakeJsonString);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        JSONArray c = new JSONArray();
+
+        for (int i = 0; i < a.length(); i++) {
+
+            JSONObject b = new JSONObject(a.get(i).toString());
+
+
+            ObjectNode treeRootNode = objectMapper.createObjectNode();
+
+            treeRootNode.put("value", b.get("value").toString());
+            treeRootNode.put("date", b.get("date").toString());
+
+            c.put(treeRootNode);
+
+
+        }
+
+//
+        String d = c.toString().replace("\\", "");
+        d = d.replace("\"{", "{");
+        d = d.replace("}\"", "}");
+
+
+
+        MockBankCountryData wbpop = new MockBankCountryData(country);
+
+        ArrayList<MockWorldBankPopulationRecord> wbrecords = new ArrayList<>();
+
+        try {
+
+            wbrecords = objectMapper.readValue(
+                    d,
+                    objectMapper.getTypeFactory().constructCollectionType(
+                            List.class, MockWorldBankPopulationRecord.class));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        wbpop.setRecords(wbrecords);
+
+        return wbpop;
+
+    }
+
 
     @Override
     public boolean hasNext() {

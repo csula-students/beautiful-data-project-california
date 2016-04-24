@@ -9,6 +9,10 @@ public class MockWorldBankPopulationRecord {
 
     private String date;
 
+    MockWorldBankPopulationRecord(){
+
+    }
+
     MockWorldBankPopulationRecord(String value, String date) {
 
         this.value = value;
