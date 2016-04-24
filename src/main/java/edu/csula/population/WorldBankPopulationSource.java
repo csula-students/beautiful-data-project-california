@@ -82,22 +82,6 @@ public class WorldBankPopulationSource implements Source<WorldBankCountryPopulat
 
         ArrayList<WorldBankPopulationRecord> wbrecords = new ArrayList<>();
 
-        //String str = "{ \"name\": \"Alice\", \"age\": 20 }";
-
-        //System.out.println(json.getArray().length());
-        //JSONObject j = new JSONObject(str);
-        //System.out.println(j.length());
-
-
-        //JSONObject obj  = new JSONObject(str);
-//        try{
-//            JsonNode rootNode = objectMapper.readTree(str);
-//        }catch (IOException e){
-//            e.printStackTrace();
-//        }
-
-//
-
         try {
 
             wbrecords = objectMapper.readValue(
@@ -107,7 +91,7 @@ public class WorldBankPopulationSource implements Source<WorldBankCountryPopulat
         } catch (IOException e) {
             e.printStackTrace();
         }
-////
+
         wbpop.setRecords(wbrecords);
 
         return wbpop;
