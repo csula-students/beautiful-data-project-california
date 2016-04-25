@@ -1,5 +1,6 @@
 package edu.csula.datascience.acquisition;
 
+import com.google.common.collect.Lists;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -12,6 +13,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -29,26 +31,38 @@ public class WorldBankPopulationCollectorTest {
         source = new MockWorldBankPopulationSource();
     }
 
+
     @Test
-    public void save_source_to_mongodb() throws Exception {
+    public  void mungee() throws Exception{
 
-        Collection<MockBankCountryData> src= source.next();
-        collector.save(src);
+        List<MockBankCountryData> list = (List<MockBankCountryData>) collector.mungee(source.next());
 
-        MongoClient mongoClient;
-        MongoDatabase database;
-        MongoCollection<Document> collection;
+        System.out.println(list.get(0).getRecords().size());
 
-        mongoClient = new MongoClient();
-        database = mongoClient.getDatabase("test-countries-db");
-        collection = database.getCollection("test_world_bank_population");
-
-
-        Assert.assertEquals(collection.count(),1);
-
-        database.getCollection("test_world_bank_population").drop();
+        //Assert.assertEquals(list.get(0).getRecords().size(), 19);
 
     }
+
+//    @Test
+//    public void save_source_to_mongodb() throws Exception {
+//
+//        Collection<MockBankCountryData> src= source.next();
+//        collector.save(src);
+//
+//        MongoClient mongoClient;
+//        MongoDatabase database;
+//        MongoCollection<Document> collection;
+//
+//        mongoClient = new MongoClient();
+//        database = mongoClient.getDatabase("test-countries-db");
+//        collection = database.getCollection("test_world_bank_population");
+//
+//
+//        Assert.assertEquals(collection.count(),1);
+//
+//        database.getCollection("test_world_bank_population").drop();
+//
+//    }
 
     @Test
     public void check_get_source() throws Exception{

@@ -36,4 +36,8 @@ public class MockBankCountryData {
         this.records = records;
     }
 
+    public static MockBankCountryData build(MockBankCountryData data){
+        return new MockBankCountryData(data.getCountry(),data.getRecords());
+    }
+
 }

@@ -121,6 +121,7 @@ public class MockWorldBankPopulationSource implements Source<MockBankCountryData
         list.add(16,new MockWorldBankPopulationRecord("24441076","1996"));
         list.add(17,new MockWorldBankPopulationRecord("24038761","1995"));
         list.add(18,new MockWorldBankPopulationRecord("23619358","1994"));
+        list.add(19,null);
 
         MockBankCountryData a = new MockBankCountryData("Peru",list);
 

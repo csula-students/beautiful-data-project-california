@@ -29,7 +29,13 @@ public class MockWorldBankPopulationCollector implements Collector<MockBankCount
 
     @Override
     public Collection<MockBankCountryData> mungee(Collection<MockBankCountryData> src) {
-        return src;
+
+        return src
+                .stream()
+                .filter(data -> data.getRecords() != null)
+                .map(MockBankCountryData::build)
+                .collect(Collectors.toList());
+        //return src;
     }
 
     @Override
