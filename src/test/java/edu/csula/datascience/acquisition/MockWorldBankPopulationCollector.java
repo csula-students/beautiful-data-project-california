@@ -6,7 +6,9 @@ import com.mongodb.client.MongoDatabase;
 import edu.csula.population.Collector;
 import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,12 +32,25 @@ public class MockWorldBankPopulationCollector implements Collector<MockBankCount
     @Override
     public Collection<MockBankCountryData> mungee(Collection<MockBankCountryData> src) {
 
-        return src
-                .stream()
-                .filter(data -> data.getRecords() != null)
-                .map(MockBankCountryData::build)
-                .collect(Collectors.toList());
-        //return src;
+        Iterator<MockBankCountryData> iterator = src.iterator();
+        Collection<MockBankCountryData> other = new ArrayList<>();
+
+        while (iterator.hasNext()) {
+            MockBankCountryData a = iterator.next();
+
+            MockBankCountryData b = new MockBankCountryData(a.getCountry());
+            ArrayList<MockWorldBankPopulationRecord> list = new ArrayList<MockWorldBankPopulationRecord>();
+            for (int i = 0; i < a.getRecords().size(); i++) {
+                if (!(a.getRecords().get(i).getDate() == null && a.getRecords().get(i).getValue() == null)) {
+                    list.add(new MockWorldBankPopulationRecord(a.getRecords().get(i).getValue(), a.getRecords().get(i).getDate()));
+                    b.setRecords(list);
+                }
+            }
+
+            other.add(b);
+        }
+
+        return other;
     }
 
     @Override
