@@ -12,6 +12,10 @@ public class PopulationRecord {
 
     private int year;
 
+    public PopulationRecord() {
+
+    }
+
     public int getTotal() {
         return total;
     }

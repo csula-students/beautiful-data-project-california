@@ -8,7 +8,7 @@ public class CountryPopulation {
 
     private ArrayList<PopulationRecord> records;
 
-    CountryPopulation(String name) {
+    public CountryPopulation(String name) {
         this.name = name;
     }
 
