@@ -5,7 +5,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -13,7 +15,7 @@ import java.util.stream.Stream;
 /**
  * Created by williamsalinas on 4/21/16.
  */
-public class WorldBankPopulationCollector implements Collector<WorldBankCountryPopulation, WorldBankCountryPopulation>{
+public class WorldBankPopulationCollector implements Collector<WorldBankCountryPopulation, WorldBankCountryPopulation> {
 
     MongoClient mongoClient;
     MongoDatabase database;
@@ -28,7 +30,30 @@ public class WorldBankPopulationCollector implements Collector<WorldBankCountryP
 
     @Override
     public Collection<WorldBankCountryPopulation> mungee(Collection<WorldBankCountryPopulation> src) {
-        return src;
+
+
+        Iterator<WorldBankCountryPopulation> iterator = src.iterator();
+        Collection<WorldBankCountryPopulation> other = new ArrayList<>();
+
+        while (iterator.hasNext()) {
+            WorldBankCountryPopulation a = iterator.next();
+
+            WorldBankCountryPopulation b = new WorldBankCountryPopulation(a.getCountry());
+            ArrayList<WorldBankPopulationRecord> list = new ArrayList<WorldBankPopulationRecord>();
+            for (int i = 0; i < a.getRecords().size(); i++) {
+                if (!(a.getRecords().get(i).getDate() == null && a.getRecords().get(i).getValue() == null)) {
+                    list.add(new WorldBankPopulationRecord(a.getRecords().get(i).getValue(), a.getRecords().get(i).getDate()));
+                    b.setRecords(list);
+                }
+            }
+
+            other.add(b);
+        }
+
+        return other;
+
+
+        //return src;
     }
 
     @Override
