@@ -58,13 +58,37 @@ public class ImportElasticsearch {
     private final static String typeName = "coordinates";
 
     public static void main(String[] args) {
-        try {
+        //try {
             System.out.println("IMPORTING");
 //            csvImport("/Users/theory/Downloads/openaddr-collected-global/at/31254.csv");
-            csvImport("/Users/williamsalinas/Desktop/openaddr-collected-europe/places/europe-1/biella.csv");
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+
+        //String path1 = "/Users/williamsalinas/Desktop/openaddr-collected-europe/places/europe";
+
+        for (int i = 4; i <=48 ; i++) {
+                //System.out.println(path1 +  "-" + i);
+
+            String partialpath = "/Users/williamsalinas/Desktop/openaddr-collected-europe/places/europe";
+            //looping through the directory
+            String path = partialpath + "-" + i;
+            System.out.println(path);
+            //String path = "/Users/williamsalinas/Desktop/openaddr-collected-europe/places/europe-1";
+            File currentDir = new File(path);
+            File [] files = currentDir.listFiles();
+
+            for (File file: files) {
+                try {
+                    csvImport(path + "/" + file.getName());
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(path + "/" + file.getName());
+            }
         }
+            //
+            //csvImport("/Users/williamsalinas/Desktop/openaddr-collected-europe/places/europe-1/biella.csv");
+//        } catch (URISyntaxException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static void csvImport(String filename) throws URISyntaxException {
