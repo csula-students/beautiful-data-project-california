@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.util.LinkedList;
 
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
@@ -58,21 +59,16 @@ public class ImportElasticsearch {
     private final static String typeName = "coordinates";
 
     public static void main(String[] args) {
-        //try {
-            System.out.println("IMPORTING");
-//            csvImport("/Users/theory/Downloads/openaddr-collected-global/at/31254.csv");
 
-        //String path1 = "/Users/williamsalinas/Desktop/openaddr-collected-europe/places/europe";
+        System.out.println("IMPORTING");
 
-        //for (int i = 4; i <=48 ; i++) {
-                //System.out.println(path1 +  "-" + i);
+        LinkedList<String> list;
+        list = OpenAddressDataRegionList.getCountryList();
+        for (int i = 0; i < list.size() ; i++) {
 
-            //String path = "/Users/williamsalinas/Desktop/openaddr-collected-europe/total";
-            String path = "/Users/williamsalinas/Desktop/openaddr-collected-asia/total";
-            //looping through the directory
-            //String path = partialpath + "-" + i;
+            String path = "/Users/williamsalinas/Desktop/openaddr-collected-" + list.get(i) + "/total";
+
             System.out.println(path);
-            //String path = "/Users/williamsalinas/Desktop/openaddr-collected-europe/places/europe-1";
             File currentDir = new File(path);
             File [] files = currentDir.listFiles();
 
@@ -84,12 +80,8 @@ public class ImportElasticsearch {
                 }
                 System.out.println(path + "/" + file.getName());
             }
-        //}
-            //
-            //csvImport("/Users/williamsalinas/Desktop/openaddr-collected-europe/places/europe-1/biella.csv");
-//        } catch (URISyntaxException e) {
-//            e.printStackTrace();
-//        }
+        }
+
     }
 
     public static void csvImport(String filename) throws URISyntaxException {

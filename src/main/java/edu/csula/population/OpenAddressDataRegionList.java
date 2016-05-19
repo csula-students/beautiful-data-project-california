@@ -10,7 +10,11 @@ public class OpenAddressDataRegionList {
 
     final static String[] regions = new String[]{
             "asia",
-            //"europe"
+            "europe",
+            "us_northeast",
+            "us_west",
+            "us_midwest",
+            "us_south"
     };
 
     public static LinkedList<String> getCountryList() {
