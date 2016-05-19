@@ -64,12 +64,13 @@ public class ImportElasticsearch {
 
         //String path1 = "/Users/williamsalinas/Desktop/openaddr-collected-europe/places/europe";
 
-        for (int i = 4; i <=48 ; i++) {
+        //for (int i = 4; i <=48 ; i++) {
                 //System.out.println(path1 +  "-" + i);
 
-            String partialpath = "/Users/williamsalinas/Desktop/openaddr-collected-europe/places/europe";
+            //String path = "/Users/williamsalinas/Desktop/openaddr-collected-europe/total";
+            String path = "/Users/williamsalinas/Desktop/openaddr-collected-asia/total";
             //looping through the directory
-            String path = partialpath + "-" + i;
+            //String path = partialpath + "-" + i;
             System.out.println(path);
             //String path = "/Users/williamsalinas/Desktop/openaddr-collected-europe/places/europe-1";
             File currentDir = new File(path);
@@ -83,7 +84,7 @@ public class ImportElasticsearch {
                 }
                 System.out.println(path + "/" + file.getName());
             }
-        }
+        //}
             //
             //csvImport("/Users/williamsalinas/Desktop/openaddr-collected-europe/places/europe-1/biella.csv");
 //        } catch (URISyntaxException e) {
@@ -162,6 +163,11 @@ public class ImportElasticsearch {
                     );
                 }
             });
+
+            bulkProcessor.close();
+            parser.close();
+            node.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
