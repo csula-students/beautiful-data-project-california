@@ -16,6 +16,14 @@ public class PopulationRecord {
 
     }
 
+    public PopulationRecord(int total,int age, int females, int males, int year){
+        this.total = total;
+        this.age = age;
+        this.females = females;
+        this.males = males;
+        this.year = year;
+    }
+
     public int getTotal() {
         return total;
     }

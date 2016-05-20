@@ -56,6 +56,18 @@ task es(type: JavaExec) {
   main = 'edu.csula.population.ImportElasticsearch'
 }
 
+task es_wp(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+
+  main = 'edu.csula.population.importElasticsearch_world_pop'
+}
+
+task es_wp_gender(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+
+  main = 'edu.csula.population.importElasticsearch_pop'
+}
+
 task wrapper(type: Wrapper) {
   gradleVersion = '2.0'
 }
