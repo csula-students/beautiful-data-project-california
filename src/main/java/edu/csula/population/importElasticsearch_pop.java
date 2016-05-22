@@ -61,9 +61,6 @@ public class importElasticsearch_pop {
 
         System.out.println("IMPORTING");
 
-        //LinkedList<String> list;
-        //list = WorldBankCountryList.getCountryListcode();
-
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
         for (int i = 1980; i <= year; i++) {
@@ -80,7 +77,7 @@ public class importElasticsearch_pop {
     public static void jsonImport(String country, int year) throws URISyntaxException {
 
         Node node = nodeBuilder().settings(Settings.builder()
-                .put("cluster.name", "willy10871")
+                .put("cluster.name", "willy1087")
                 .put("path.home", "elasticsearch-data")).node();
         Client client = node.client();
 

@@ -50,7 +50,6 @@ import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
  ```
  */
 
-
 public class importElasticsearch_world_pop {
     private final static String indexName = "bd-us-populations";
     private final static String typeName = "population";
@@ -59,25 +58,20 @@ public class importElasticsearch_world_pop {
 
         System.out.println("IMPORTING");
 
-        //LinkedList<String> list;
-        //list = WorldBankCountryList.getCountryListcode();
-
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
-        //for(int i = 0; i < list.size(); i++){
-            try {
-                jsonImport("US",(year -2) + "");
-            }catch (URISyntaxException e){
-                e.printStackTrace();
-            }
-        //}
+        try {
+            jsonImport("US",(year -2) + "");
+        }catch (URISyntaxException e){
+            e.printStackTrace();
+        }
 
     }
 
     public static void jsonImport(String country, String year) throws URISyntaxException {
 
         Node node = nodeBuilder().settings(Settings.builder()
-                .put("cluster.name", "willy10871")
+                .put("cluster.name", "willy1087")
                 .put("path.home", "elasticsearch-data")).node();
         Client client = node.client();
 
@@ -120,65 +114,38 @@ public class importElasticsearch_world_pop {
 
 
         JsonNode json = Tools.requestJson(
-                    String.format("http://api.worldbank.org/countries/%s/indicators/SP.POP.TOTL?per_page=50&date=1980:%s&format=json",
-                            country, year));
+                String.format("http://api.worldbank.org/countries/%s/indicators/SP.POP.TOTL?per_page=50&date=1980:%s&format=json",
+                        country, year));
 
-            ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-            JSONArray a = new JSONArray(json.getArray().get(1).toString());
+        JSONArray a = new JSONArray(json.getArray().get(1).toString());
 
-            JSONArray c = new JSONArray();
+        JSONArray c = new JSONArray();
 
-            for (int i = 0; i < a.length(); i++) {
+        for (int i = 0; i < a.length(); i++) {
 
-                JSONObject b = new JSONObject(a.get(i).toString());
+            JSONObject b = new JSONObject(a.get(i).toString());
 
-                ObjectNode treeRootNode = objectMapper.createObjectNode();
+            ObjectNode treeRootNode = objectMapper.createObjectNode();
 
-                treeRootNode.put("value", b.get("value").toString());
-                treeRootNode.put("date", b.get("date").toString());
+            treeRootNode.put("value", b.get("value").toString());
+            treeRootNode.put("date", b.get("date").toString());
 
-                c.put(treeRootNode);
+            c.put(treeRootNode);
 
-                WorldBankPopulationRecord test = new WorldBankPopulationRecord(b.get("value").toString(),b.get("date").toString());
-
-
-                bulkProcessor.add(new IndexRequest(indexName, typeName)
-                        .source(gson.toJson(test))
-                );
-
-            }
-
-            String d = c.toString().replace("\\", "");
-            d = d.replace("\"{", "{");
-            d = d.replace("}\"", "}");
+            WorldBankPopulationRecord test = new WorldBankPopulationRecord(b.get("value").toString(),b.get("date").toString());
 
 
-            WorldBankCountryPopulation wbpop = new WorldBankCountryPopulation(country);
+            bulkProcessor.add(new IndexRequest(indexName, typeName)
+                    .source(gson.toJson(test))
+            );
 
-            ArrayList<WorldBankPopulationRecord> wbrecords = new ArrayList<>();
-
-
-            try {
-
-                wbrecords = objectMapper.readValue(
-                        d,
-                        objectMapper.getTypeFactory().constructCollectionType(
-                                List.class, WorldBankPopulationRecord.class));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            wbpop.setRecords(wbrecords);
+        }
 
 
-//                    bulkProcessor.add(new IndexRequest(indexName, typeName)
-//                            .source(gson.toJson(wbrecords))
-//                    );
-
-
-            bulkProcessor.close();
-            node.close();
+        bulkProcessor.close();
+        node.close();
 
         System.out.println("COMPLETE");
     }
