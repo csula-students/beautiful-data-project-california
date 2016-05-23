@@ -87,7 +87,7 @@ public class ImportElasticsearch {
     public static void csvImport(String filename) throws URISyntaxException {
 
         Node node = nodeBuilder().settings(Settings.builder()
-                .put("cluster.name", "willy1087")
+                .put("cluster.name", "willy10871")
                 .put("path.home", "elasticsearch-data")).node();
         Client client = node.client();
 
