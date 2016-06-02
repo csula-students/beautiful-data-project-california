@@ -1,5 +1,7 @@
 package edu.csula.population;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
 import com.mashape.unirest.http.JsonNode;
 import io.searchbox.action.BulkableAction;
@@ -8,7 +10,7 @@ import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.core.Bulk;
 import io.searchbox.core.Index;
-
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -16,25 +18,20 @@ import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.Collection;
 
-
-
 /**
- * Created by williamsalinas on 5/30/16.
+ * Created by williamsalinas on 6/1/16.
  */
 
 /*
  ```
- PUT /bd-us-populations-gender
+ PUT /bd-us-populations
  {
      "mappings" : {
          "population" : {
              "properties" : {
 
-                        "total": {"type":"integer"},
-                        "age" : {"type" : "integer"},
-                        "date" : {"type": "date"},
-                        "males" :{"type": "integer"},
-                        "females" : {"type": "integer"}
+                        "value" : {"type" : "double"},
+                        "date" : {"type": "date"}
 
              }
          }
@@ -43,28 +40,26 @@ import java.util.Collection;
  ```
  */
 
-public class ImportElasticsearch_pop_amazon {
-    public static void main(String[] args) throws URISyntaxException, IOException {
+public class ImportElasticsearch_world_pop_amazon {
+
+    public static void main(String[] args) {
 
         System.out.println("IMPORTING");
 
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
-        for (int i = 1980; i <= year; i++) {
-
-            try {
-                jsonImport("United States",i);
-            }catch (URISyntaxException e){
-                e.printStackTrace();
-            }
+        try {
+            jsonImport("US",(year) + "");
+        }catch (URISyntaxException e){
+            e.printStackTrace();
         }
-
 
     }
 
-    public static void jsonImport(String country, int year) throws URISyntaxException {
+    public static void jsonImport(String country, String year) throws URISyntaxException {
 
-        String indexName = "bd-us-populations-gender";
+
+        String indexName = "bd-us-populations";
         String typeName = "population";
         String awsAddress = "http://search-cs594-acbszs2ao6gvdlvo5gcqwzor7m.us-west-2.es.amazonaws.com/";
 
@@ -79,22 +74,32 @@ public class ImportElasticsearch_pop_amazon {
         System.out.println("API READING");
 
 
-        Collection<PopulationRecord> records = Lists.newArrayList();
         int count = 0;
+        Collection<WorldBankPopulationRecord> records = Lists.newArrayList();
 
 
         JsonNode json = Tools.requestJson(
-                String.format("http://api.population.io:80/1.0/population/%d/%s/",
-                        year, country));
+                String.format("http://api.worldbank.org/countries/%s/indicators/SP.POP.TOTL?per_page=50&date=1980:%s&format=json",
+                        country, year));
 
-        for (int i = 0; i < json.getArray().length(); i++) {
-            JSONObject b = new JSONObject(json.getArray().get(i).toString());
+        ObjectMapper objectMapper = new ObjectMapper();
 
-            //System.out.println(b.getInt("total") + " and " + b.getInt("age") + " and " + b.getInt("females") + " and " +
-            //         b.getInt("males") + " and " +b.getString("year"));
+        JSONArray a = new JSONArray(json.getArray().get(1).toString());
 
-            PopulationRecord test = new PopulationRecord(b.getInt("total"),b.getInt("age"),b.getInt("females"),
-                    b.getInt("males"),String.valueOf(b.getInt("year")));
+        JSONArray c = new JSONArray();
+
+        for (int i = 0; i < a.length(); i++) {
+
+            JSONObject b = new JSONObject(a.get(i).toString());
+
+            ObjectNode treeRootNode = objectMapper.createObjectNode();
+
+            treeRootNode.put("value", b.get("value").toString());
+            treeRootNode.put("date", b.get("date").toString());
+
+            c.put(treeRootNode);
+
+            WorldBankPopulationRecord test = new WorldBankPopulationRecord(b.get("value").toString(),b.get("date").toString());
 
 
             if (count < 500) {
@@ -120,28 +125,25 @@ public class ImportElasticsearch_pop_amazon {
                 }
             }
 
+            try {
+                Collection<BulkableAction> actions = Lists.newArrayList();
+                records.stream()
+                        .forEach(tmp -> {
+                            actions.add(new Index.Builder(tmp).build());
+                        });
+                Bulk.Builder bulk = new Bulk.Builder()
+                        .defaultIndex(indexName)
+                        .defaultType(typeName)
+                        .addAction(actions);
+                client.execute(bulk.build());
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
 
         }
-
-        try {
-            Collection<BulkableAction> actions = Lists.newArrayList();
-            records.stream()
-                    .forEach(tmp -> {
-                        actions.add(new Index.Builder(tmp).build());
-                    });
-            Bulk.Builder bulk = new Bulk.Builder()
-                    .defaultIndex(indexName)
-                    .defaultType(typeName)
-                    .addAction(actions);
-            client.execute(bulk.build());
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-
 
         System.out.println("COMPLETE");
 
+
     }
-
-
 }

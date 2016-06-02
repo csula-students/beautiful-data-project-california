@@ -10,18 +10,18 @@ public class PopulationRecord {
 
     private int males;
 
-    private int year;
+    private String date;
 
     public PopulationRecord() {
 
     }
 
-    public PopulationRecord(int total,int age, int females, int males, int year){
+    public PopulationRecord(int total,int age, int females, int males, String date){
         this.total = total;
         this.age = age;
         this.females = females;
         this.males = males;
-        this.year = year;
+        this.date = date;
     }
 
     public int getTotal() {
@@ -48,12 +48,12 @@ public class PopulationRecord {
         this.males = males;
     }
 
-    public int getYear() {
-        return year;
+    public String getDate() {
+        return date;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public int getAge() {
@@ -66,6 +66,6 @@ public class PopulationRecord {
 
     @Override
     public String toString() {
-        return String.format("Total: %d, Year: %d", total, year);
+        return String.format("Total: %d, Year: %d", total, date);
     }
 }

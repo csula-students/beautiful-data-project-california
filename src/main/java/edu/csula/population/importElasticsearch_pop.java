@@ -130,7 +130,7 @@ public class importElasticsearch_pop {
            //         b.getInt("males") + " and " +b.getInt("year"));
 
             PopulationRecord test = new PopulationRecord(b.getInt("total"),b.getInt("age"),b.getInt("females"),
-                    b.getInt("males"),b.getInt("year"));
+                    b.getInt("males"),String.valueOf(b.getInt("year")));
 
             bulkProcessor.add(new IndexRequest(indexName, typeName)
                     .source(gson.toJson(test))
