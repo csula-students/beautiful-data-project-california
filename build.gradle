@@ -81,6 +81,12 @@ task es_wp_amazon(type: JavaExec) {
   main = 'edu.csula.population.ImportElasticsearch_world_pop_amazon'
 }
 
+task es_amazon(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+
+    main = 'edu.csula.population.ImportElasticsearch_amazon'
+}
+
 
 task wrapper(type: Wrapper) {
   gradleVersion = '2.0'

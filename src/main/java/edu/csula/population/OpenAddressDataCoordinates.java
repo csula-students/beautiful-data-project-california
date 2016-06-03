@@ -8,7 +8,7 @@ public class OpenAddressDataCoordinates {
     private String longitude;
     private String latitude;
     private String location;
-    private int year;
+    private String year;
 
     OpenAddressDataCoordinates(){
 
@@ -44,11 +44,11 @@ public class OpenAddressDataCoordinates {
         return location;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 }

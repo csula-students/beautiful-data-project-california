@@ -148,7 +148,7 @@ public class ImportElasticsearch {
                     OpenAddressDataCoordinates coord = new OpenAddressDataCoordinates();
 
                     coord.setLocation(record.get("LAT") + "," + record.get("LON"));
-                    coord.setYear(2016);
+                    coord.setYear("2016");
 
                     bulkProcessor.add(new IndexRequest(indexName, typeName)
                             .source(gson.toJson(coord))
