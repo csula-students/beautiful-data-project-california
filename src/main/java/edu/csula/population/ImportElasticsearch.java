@@ -37,6 +37,7 @@ import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
                  "year": {
                      "type": "date"
                  }
+                 "count": {"type" : "integer"}
              }
          }
      }
@@ -66,7 +67,7 @@ public class ImportElasticsearch {
         list = OpenAddressDataRegionList.getCountryList();
         for (int i = 0; i < list.size() ; i++) {
 
-            String path = "/Users/williamsalinas/Desktop/openaddr-collected-" + list.get(i) + "/total";
+            String path = "/Users/williamsalinas/Desktop/openaddr-collected-" + list.get(i) + "/test";
 
             System.out.println(path);
             File currentDir = new File(path);
@@ -87,7 +88,7 @@ public class ImportElasticsearch {
     public static void csvImport(String filename) throws URISyntaxException {
 
         Node node = nodeBuilder().settings(Settings.builder()
-                .put("cluster.name", "willy10871")
+                .put("cluster.name", "willy1087")
                 .put("path.home", "elasticsearch-data")).node();
         Client client = node.client();
 
@@ -142,13 +143,14 @@ public class ImportElasticsearch {
             parser.forEach(record -> {
                 // cleaning up dirty data which doesn't have time or temperature
                 if (
-                        !record.get("LON").isEmpty() &&
-                                !record.get("LAT").isEmpty()
+                        !record.get("lon").isEmpty() &&
+                                !record.get("lat").isEmpty()
                         ) {
                     OpenAddressDataCoordinates coord = new OpenAddressDataCoordinates();
 
-                    coord.setLocation(record.get("LAT") + "," + record.get("LON"));
+                    coord.setLocation(record.get("lat") + "," + record.get("lon"));
                     coord.setYear("2016");
+                    coord.setCount(Integer.parseInt(record.get("count")));
 
                     bulkProcessor.add(new IndexRequest(indexName, typeName)
                             .source(gson.toJson(coord))

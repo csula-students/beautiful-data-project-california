@@ -25,17 +25,19 @@ import java.util.LinkedList;
 
 /*
  ```
- PUT /bd-populations
+ PUT /bd-populations-test
  {
      "mappings" : {
          "coordinates" : {
              "properties" : {
                  "location" : {
-                     "type" : "geo_point"
+                     "type" : "geo_point",
+                     "index" : "not_analyzed"
                  },
                  "year": {
                      "type": "date"
                  }
+                 "count": {"type" : "integer"}
              }
          }
      }
@@ -53,7 +55,7 @@ public class ImportElasticsearch_amazon {
         list = OpenAddressDataRegionList.getCountryList();
         for (int i = 0; i < list.size() ; i++) {
 
-            String path = "/Users/williamsalinas/Desktop/openaddr-collected-" + list.get(i) + "/total";
+            String path = "/Users/williamsalinas/Desktop/openaddr-collected-" + list.get(i) + "/test";
 
             System.out.println(path);
             File currentDir = new File(path);
@@ -73,7 +75,7 @@ public class ImportElasticsearch_amazon {
 
     public static void csvImport(String filename) throws URISyntaxException {
 
-        String indexName = "bd-populations";
+        String indexName = "bd-populations-test";
         String typeName = "coordinates";
         String awsAddress = "http://search-cs594-acbszs2ao6gvdlvo5gcqwzor7m.us-west-2.es.amazonaws.com/";
 
@@ -107,13 +109,14 @@ public class ImportElasticsearch_amazon {
             for (CSVRecord record: parser) {
                 // cleaning up dirty data which doesn't have time or temperature
                 if (
-                        !record.get("LON").isEmpty() &&
-                                !record.get("LAT").isEmpty()
+                        !record.get("lon").isEmpty() &&
+                                !record.get("lat").isEmpty()
                         ) {
                     OpenAddressDataCoordinates coord = new OpenAddressDataCoordinates();
 
-                    coord.setLocation(record.get("LAT") + "," + record.get("LON"));
+                    coord.setLocation(record.get("lat") + "," + record.get("lon"));
                     coord.setYear("2016");
+                    coord.setCount(Integer.parseInt(record.get("count")));
 
                     if (count < 500) {
                         coordinates.add(coord);
