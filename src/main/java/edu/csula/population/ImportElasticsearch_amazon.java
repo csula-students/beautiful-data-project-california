@@ -31,12 +31,10 @@ import java.util.LinkedList;
          "coordinates" : {
              "properties" : {
                  "location" : {
-                     "type" : "geo_point",
-                     "index" : "not_analyzed"
-                 },
+                     "type" : "geo_point"                 },
                  "year": {
                      "type": "date"
-                 }
+                 },
                  "count": {"type" : "integer"}
              }
          }
