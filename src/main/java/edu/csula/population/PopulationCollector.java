@@ -42,7 +42,7 @@ public class PopulationCollector implements Collector<CountryPopulation, Country
                         Document sub = new Document();
 
                         sub.append("age", i.getAge())
-                                .append("year", i.getYear())
+                                .append("year", i.getDate())
                                 .append("male", i.getMales())
                                 .append("female", i.getFemales());
 
