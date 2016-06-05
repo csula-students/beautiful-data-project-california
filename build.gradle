@@ -12,6 +12,8 @@ cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml f
 
 sourceCompatibility = 1.8
 
+test.testLogging.showStandardStreams = true
+
 repositories {
   mavenCentral()
 }
@@ -35,15 +37,56 @@ dependencies {
   compile 'com.fasterxml.jackson.core:jackson-core:2.7.3'
   compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.3'
   compile 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
+  compile 'org.apache.commons:commons-csv:1.2'
+  compile 'org.elasticsearch:elasticsearch:2.2.0'
+  compile 'com.google.code.gson:gson:2.6.2'
+  compile group: 'io.searchbox', name: 'jest', version: '2.0.2'
 
   testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
-task hello(type: JavaExec) {
+task address(type: JavaExec) {
   classpath = sourceSets.main.runtimeClasspath
 
-  main = 'edu.csula.datascience.examples.Hello'
+  main = 'edu.csula.population.OpenAddressDataCollectorApp'
 }
+
+task es(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+
+  main = 'edu.csula.population.ImportElasticsearch'
+}
+
+task es_wp(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+
+  main = 'edu.csula.population.importElasticsearch_world_pop'
+}
+
+task es_wp_gender(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+
+  main = 'edu.csula.population.importElasticsearch_pop'
+}
+
+task es_wp_gender_amazon(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+
+  main = 'edu.csula.population.ImportElasticsearch_pop_amazon'
+}
+
+task es_wp_amazon(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+
+  main = 'edu.csula.population.ImportElasticsearch_world_pop_amazon'
+}
+
+task es_amazon(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+
+    main = 'edu.csula.population.ImportElasticsearch_amazon'
+}
+
 
 task wrapper(type: Wrapper) {
   gradleVersion = '2.0'

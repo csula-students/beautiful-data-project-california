@@ -11,45 +11,44 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * An example of Collector
+ * Created by williamsalinas on 4/24/16.
  */
-public class PopulationCollector implements Collector<CountryPopulation, CountryPopulation> {
+public class OpenAddressDataCollector implements Collector<OpenAddressData, OpenAddressData> {
+
     MongoClient mongoClient;
     MongoDatabase database;
     MongoCollection<Document> collection;
 
-    public PopulationCollector() {
+    public OpenAddressDataCollector() {
         // establish database connection to MongoDB
         mongoClient = new MongoClient();
         database = mongoClient.getDatabase("countries-db");
-        collection = database.getCollection("population");
+        collection = database.getCollection("openaddresscoordinates");
     }
 
     @Override
-    public Collection<CountryPopulation> mungee(Collection<CountryPopulation> src) {
+    public Collection<OpenAddressData> mungee(Collection<OpenAddressData> src) {
         return src;
     }
 
     @Override
-    public void save(Collection<CountryPopulation> data) {
+    public void save(Collection<OpenAddressData> data) {
         List<Document> documents = data.stream()
                 .map(item -> {
 
                     Document country = new Document()
-                            .append("name", item.getName());
+                            .append("name", item.getRegion());
 
-                    Stream<Document> docs = item.getRecords().stream().map(i -> {
+                    Stream<Document> docs = item.getCoordinates().stream().map(i -> {
                         Document sub = new Document();
 
-                        sub.append("age", i.getAge())
-                                .append("year", i.getDate())
-                                .append("male", i.getMales())
-                                .append("female", i.getFemales());
+                        sub.append("latitude", i.getLatitude())
+                                .append("longitude", i.getLongitude());
 
                         return sub;
                     });
 
-                    country.append("records", docs.collect(Collectors.toList()));
+                    country.append("coordinates", docs.collect(Collectors.toList()));
 
                     return country;
                 })

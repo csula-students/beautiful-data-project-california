@@ -13,6 +13,11 @@ public class WorldBankPopulationRecord {
 
     }
 
+    WorldBankPopulationRecord(String value, String date) {
+        this.value = value;
+        this.date = date;
+    }
+
     public String getValue() {
         return value;
     }
